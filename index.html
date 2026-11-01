@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F4EF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Феи">
+<title>Феи — макет приложения</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F4EF; --card:#FFFFFF; --line:#E3E5DE; --line-soft:#EEF0EA;
+  --ink:#1B1F1D; --muted:#5A615C; --hint:#6B726D;
+  --green:#1A7F5A; --green-dark:#145E43; --green-soft:#E2F1EA;
+  --orange:#B45309; --orange-text:#8A3F06; --orange-soft:#FBEBDD;
+  --check-off:#B9BEB6; --field:#D5D8D0;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#E6E8E2;font-family:Manrope,system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-tap-highlight-color:transparent}
+button,input{font-family:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #378ADD;outline-offset:2px}
+.app{max-width:430px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--bg);position:relative}
+.screen{padding:calc(env(safe-area-inset-top,0px) + 28px) 20px calc(env(safe-area-inset-bottom,0px) + 112px);display:flex;flex-direction:column;gap:18px}
+h1{margin:0;font-size:32px;font-weight:800;letter-spacing:-.02em}
+p{margin:0}
+.muted{color:var(--muted)}
+.sub{font-size:14px;font-weight:600;color:var(--muted)}
+.label{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.stack{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:4px 14px}
+.card.pad{padding:16px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.row:last-child{border-bottom:0}
+.grow{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.title{font-size:16px;font-weight:700}
+.meta{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.check{width:44px;height:44px;flex-shrink:0;border-radius:50%;border:2px solid var(--check-off);background:#fff;color:#fff;display:flex;align-items:center;justify-content:center;padding:0;transition:background .15s,border-color .15s,transform .15s}
+.check.sq{border-radius:12px}
+.check.on{background:var(--green);border-color:var(--green)}
+.check:active{transform:scale(.92)}
+.check svg{opacity:0}.check.on svg{opacity:1}
+.done .title{color:var(--muted);text-decoration:line-through;text-decoration-color:#9AA19C}
+.progress{height:8px;border-radius:4px;background:var(--line)}
+.progress>div{height:8px;border-radius:4px;background:var(--green);transition:width .25s}
+.practice{background:var(--ink);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.practice .check{width:52px;height:52px;background:transparent;border-color:#7C847F}
+.practice .check.on{background:var(--green);border-color:var(--green)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;padding:6px 10px;border-radius:999px}
+.linkbtn{align-self:flex-start;background:transparent;border:0;padding:6px 0;color:#9FE1CB;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px;min-height:44px}
+.tag{align-self:flex-start;background:var(--orange-soft);color:var(--orange-text);font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px}
+.seg{display:grid;gap:4px;background:var(--line);padding:4px;border-radius:14px}
+.seg button{height:44px;border:0;border-radius:11px;background:transparent;color:var(--muted);font-size:15px;font-weight:700}
+.seg button.on{background:#fff;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--field);background:#fff;font-size:14px;font-weight:700}
+.chip.on{background:var(--green);border-color:var(--green);color:#fff}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal .wd{text-align:center;font-size:12px;font-weight:700;color:var(--muted)}
+.cal button{height:44px;border-radius:12px;border:2px solid transparent;background:#fff;font-size:14px;font-weight:700;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cal .dot{width:5px;height:5px;border-radius:50%;background:transparent}
+.calhead{display:flex;align-items:center;justify-content:space-between}
+.iconbtn{width:44px;height:44px;border:0;border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;padding:0}
+.plus{color:var(--green);margin:-8px -8px -8px 0}
+.field{height:52px;width:100%;border-radius:14px;border:1px solid var(--field);background:#fff;padding:0 16px;font-size:17px;font-weight:600}
+.field.err{border-color:#A32D2D}
+.error{font-size:13px;font-weight:600;color:#A32D2D}
+.toggle{display:flex;align-items:center;gap:12px;min-height:60px;padding:10px 14px;border-radius:16px;border:1px solid var(--line);background:#fff;text-align:left;width:100%}
+.track{width:48px;height:28px;border-radius:14px;background:#C9CDC5;position:relative;flex-shrink:0;transition:background .15s}
+.track::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .15s}
+.track.on{background:var(--green)}.track.on::after{left:23px}
+.primary{height:54px;width:100%;border:0;border-radius:16px;background:var(--green);color:#fff;font-size:17px;font-weight:800}
+.avatar{width:40px;height:40px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.avatar.sm{width:36px;height:36px;font-size:14px}
+.round{width:44px;height:44px;flex-shrink:0;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:0}
+.legend{display:flex;align-items:center;justify-content:flex-end;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
+.legend span.sw{width:14px;height:14px;border-radius:4px}
+nav.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding:10px 0 calc(env(safe-area-inset-bottom,0px) + 12px);z-index:5}
+nav.tabs button{background:transparent;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:600;min-width:64px;min-height:44px;padding:0}
+nav.tabs button.on{color:var(--green);font-weight:700}
+nav.tabs .fab{width:52px;height:52px;min-width:52px;margin-top:-4px;border-radius:50%;background:var(--green);color:#fff;justify-content:center}
+.addbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:14px 20px calc(env(safe-area-inset-bottom,0px) + 18px);background:var(--bg);border-top:1px solid var(--line);z-index:5}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);background:var(--ink);color:#fff;font-size:14px;font-weight:700;padding:10px 16px;border-radius:999px;z-index:10;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.demo{font-size:12px;color:var(--hint);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const I = {
+  check: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>',
+  flame: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/></svg>',
+  flameBig: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/></svg>',
+  lock: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  users: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 5a3 3 0 0 1 0 6M18 15c2 .5 3 2 3 5"/></svg>',
+  usersBig: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 5a3 3 0 0 1 0 6M18 15c2 .5 3 2 3 5"/></svg>',
+  list: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3 6l1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/></svg>',
+  calendar: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
+  plus: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  close: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  left: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
+  right: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
+  refresh: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-5l-2 2M4 4v4h4M4 13a8 8 0 0 0 14 5l2-2M20 20v-4h-4"/></svg>',
+  heart: (fill) => '<svg width="20" height="20" viewBox="0 0 24 24" fill="' + fill + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg>',
+  bell: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>'
+};
+
+const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const MONTHS_GEN = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const DAYS = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+const DAYS_SHORT = ['вс','пн','вт','ср','чт','пт','сб'];
+const WD = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const YEAR = 2026, TODAY = { m: 10, d: 1 };
+
+const pad = (n) => String(n).padStart(2, '0');
+const key = (m, d) => YEAR + '-' + pad(m + 1) + '-' + pad(d);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const isToday = (m, d) => m === TODAY.m && d === TODAY.d;
+const isTomorrow = (m, d) => m === TODAY.m && d === TODAY.d + 1;
+const weekday = (m, d) => new Date(YEAR, m, d).getDay();
+const daysIn = (m) => new Date(YEAR, m + 1, 0).getDate();
+const offsetOf = (m) => (new Date(YEAR, m, 1).getDay() + 6) % 7;
+const dateLabel = (m, d) => (isToday(m, d) ? 'Сегодня, ' : isTomorrow(m, d) ? 'Завтра, ' : DAYS_SHORT[weekday(m, d)] + ', ') + d + ' ' + MONTHS_GEN[m];
+const fmtMins = (n) => { const h = Math.floor(n / 60), m = n % 60; return (h ? h + ' ч ' : '') + (m || !h ? m + ' мин' : '').trim(); };
+
+const t = (title, extra) => Object.assign({ title: title, done: false }, extra || {});
+const S = {
+  tab: 'today',
+  plan: { view: 'month', month: 10, sel: { 9: 31, 10: 1, 11: 1 } },
+  practices: [{ label: '10 минут нового', skill: 'Жонглирование', streak: 12, mins: 70, per: 10, done: false }],
+  habits: [
+    { title: 'Прогулка 10 минут', shared: true, streak: 0, done: true },
+    { title: 'Стакан воды утром', private: true, streak: 6, done: false }
+  ],
+  tasks: {
+    [key(10, 1)]: [t('Ответить на письмо из банка', { carried: true }), t('Разобрать шкаф', { done: true }), t('Спланировать неделю')],
+    [key(10, 2)]: [t('Позвонить в сервис по ремонту')],
+    [key(10, 3)]: [t('Записаться к стоматологу', { private: true }), t('Забрать посылку')],
+    [key(10, 5)]: [t('Оплатить интернет')],
+    [key(10, 7)]: [t('Купить подарок на день рождения'), t('Генеральная уборка')],
+    [key(10, 8)]: [t('Спланировать следующую неделю')],
+    [key(10, 14)]: [t('Записаться на маникюр')],
+    [key(10, 15)]: [t('Спланировать следующую неделю')],
+    [key(10, 20)]: [t('Оплатить коммунальные услуги')],
+    [key(10, 22)]: [t('Спланировать следующую неделю')],
+    [key(10, 29)]: [t('Спланировать следующую неделю'), t('Подвести итоги месяца')]
+  },
+  liked: {}, nudged: {},
+  add: null
+};
+
+const freshAdd = (m, d) => ({ type: 'task', practice: false, picked: { m: m, d: d }, calMonth: m, repeat: 'Каждый день', min: 10, vis: 'friends', share: false, title: '', skill: '', error: '' });
+
+const COLORS = {
+  a: ['#EEEDFE', '#3C3489'], s: ['#E6F1FB', '#0C447C'], z: ['#FAEEDA', '#633806'],
+  sh: ['#EAF3DE', '#27500A'], g: ['#F1EFE8', '#444441'], me: ['#E2F1EA', '#145E43']
+};
+const FRIENDS = [
+  { id: 'a', name: 'Айкоша', skill: 'вязание', streak: '21 день', practiceDone: true, done: 5, total: 5 },
+  { id: 's', name: 'Айгера', skill: 'испанский', streak: '9 дней', practiceDone: true, done: 3, total: 4 },
+  { id: 'z', name: 'Зарина', skill: 'шахматы', streak: '5 дней', practiceDone: false, done: 1, total: 4 },
+  { id: 'sh', name: 'Шибидибаби', skill: 'рисование', streak: '14 дней', practiceDone: true, done: 4, total: 6 },
+  { id: 'g', name: 'Гульзитрон', skill: 'гитара', streak: '3 дня', practiceDone: true, done: 2, total: 5 }
+];
+
+const HEAT = ['#E9EBE5', '#CDE8DA', '#8FCBAE', '#3FA27A', '#1A7F5A'];
+const HEAT_FG = ['#5A615C', '#145E43', '#0B3D2A', '#0B3D2A', '#FFFFFF'];
+const PATTERN = [4,3,4,2,4,4,1,3,4,4,2,4,3,4,0,2,4,4,3,4,4,2,3,4,4,4,3,4,4,4,3];
+
+const app = document.getElementById('app');
+
+function todayTasks() { return S.tasks[key(TODAY.m, TODAY.d)] || []; }
+
+function checkBtn(on, action, args, label, square) {
+  return '<button class="check' + (square ? ' sq' : '') + (on ? ' on' : '') + '" data-a="' + action + '" ' + args + ' aria-pressed="' + on + '" aria-label="' + esc(label) + '">' + I.check + '</button>';
+}
+
+function taskRow(task, k, i) {
+  return '<div class="row' + (task.done ? ' done' : '') + '">' +
+    checkBtn(task.done, 'task', 'data-k="' + k + '" data-i="' + i + '"', task.title, true) +
+    '<div class="grow"><p class="title">' + esc(task.title) + '</p>' +
+    (task.carried ? '<span class="tag">Перенесено со вчера</span>' : '') +
+    (task.private ? '<p class="meta">' + I.lock + 'Только я</p>' : '') +
+    '</div></div>';
+}
+
+function renderToday() {
+  const tasks = todayTasks();
+  const all = S.practices.length + S.habits.length + tasks.length;
+  const done = S.practices.filter((p) => p.done).length + S.habits.filter((h) => h.done).length + tasks.filter((x) => x.done).length;
+  const pct = all ? Math.round(done / all * 100) : 0;
+  const sharedDone = 3 + (S.habits[0] && S.habits[0].done ? 1 : 0);
+
+  let html = '<div class="screen">' +
+    '<div class="stack" style="gap:6px"><p class="sub">' + DAYS[weekday(TODAY.m, TODAY.d)] + ', ' + TODAY.d + ' ' + MONTHS_GEN[TODAY.m] + '</p>' +
+    '<div style="display:flex;align-items:baseline;justify-content:space-between"><h1>Сегодня</h1>' +
+    '<p style="font-size:15px;font-weight:700;color:var(--green-dark)">' + done + ' из ' + all + '</p></div>' +
+    '<div class="progress" style="margin-top:6px"><div style="width:' + pct + '%"></div></div></div>';
+
+  S.practices.forEach((p, i) => {
+    html += '<div class="practice">' +
+      '<div style="display:flex;align-items:center;gap:14px"><div class="grow" style="gap:4px">' +
+      '<p style="font-size:13px;font-weight:600;color:#C9CEC9">Практика · ' + esc(p.label) + '</p>' +
+      '<p style="font-size:22px;font-weight:800">' + esc(p.skill) + '</p></div>' +
+      checkBtn(p.done, 'practice', 'data-i="' + i + '"', 'Отметить практику', false) + '</div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+      '<span class="pill" style="background:#3A2A1A;color:#FFC58A">' + I.flame + (p.streak + (p.done ? 1 : 0)) + ' ' + plural(p.streak + (p.done ? 1 : 0), 'день', 'дня', 'дней') + ' подряд</span>' +
+      '<span class="pill" style="background:#2C322F;color:#E4E8E4;font-weight:600">В ' + esc(p.skill.toLowerCase()) + ': ' + fmtMins(p.mins + (p.done ? p.per : 0)) + '</span></div>' +
+      '<button class="linkbtn" data-a="skill" data-i="' + i + '">' + I.refresh + 'Сменить навык</button></div>';
+  });
+
+  if (S.habits.length) {
+    html += '<div class="stack"><p class="label">КАЖДЫЙ ДЕНЬ</p><div class="card">';
+    S.habits.forEach((h, i) => {
+      let meta = '';
+      if (h.shared) meta = I.users + 'Общий · отметились ' + sharedDone + ' из 6';
+      else if (h.private) meta = I.lock + 'Только я' + (h.streak ? ' · ' + (h.streak + (h.done ? 1 : 0)) + ' ' + plural(h.streak + (h.done ? 1 : 0), 'день', 'дня', 'дней') + ' подряд' : '');
+      else meta = h.repeat || 'Каждый день';
+      html += '<div class="row' + (h.done ? ' done' : '') + '">' + checkBtn(h.done, 'habit', 'data-i="' + i + '"', h.title, false) +
+        '<div class="grow"><p class="title">' + esc(h.title) + '</p><p class="meta">' + meta + '</p></div></div>';
+    });
+    html += '</div></div>';
+  }
+
+  html += '<div class="stack"><p class="label">ЗАДАЧИ НА СЕГОДНЯ</p>';
+  if (tasks.length) {
+    html += '<div class="card">' + tasks.map((x, i) => taskRow(x, key(TODAY.m, TODAY.d), i)).join('') + '</div>';
+  } else {
+    html += '<div class="card pad"><p class="muted" style="font-size:14px">На сегодня задач нет. Добавьте через плюс.</p></div>';
+  }
+  html += '</div><p class="demo">Это макет: данные примерные, ничего не сохраняется</p></div>';
+  return html;
+}
+
+function plural(n, one, few, many) {
+  const a = n % 10, b = n % 100;
+  if (a === 1 && b !== 11) return one;
+  if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return few;
+  return many;
+}
+
+function renderPlan() {
+  const P = S.plan;
+  let html = '<div class="screen"><h1>План</h1>' +
+    '<div class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))">' +
+    '<button class="' + (P.view === 'week' ? 'on' : '') + '" data-a="planview" data-v="week">Неделя</button>' +
+    '<button class="' + (P.view === 'month' ? 'on' : '') + '" data-a="planview" data-v="month">Месяц</button></div>';
+
+  if (P.view === 'month') {
+    const m = P.month, past = m < TODAY.m, sel = P.sel[m];
+    html += '<div class="card" style="padding:14px 12px;display:flex;flex-direction:column;gap:10px">' +
+      '<div class="calhead"><button class="iconbtn" data-a="planmonth" data-v="-1" aria-label="Предыдущий месяц">' + I.left + '</button>' +
+      '<p style="font-size:18px;font-weight:800">' + MONTHS[m] + ' ' + YEAR + '</p>' +
+      '<button class="iconbtn" data-a="planmonth" data-v="1" aria-label="Следующий месяц">' + I.right + '</button></div>' +
+      '<div class="cal">' + WD.map((w) => '<p class="wd">' + w + '</p>').join('');
+    for (let i = 0; i < offsetOf(m); i++) html += '<span></span>';
+    for (let d = 1; d <= daysIn(m); d++) {
+      let bg = '#fff', fg = 'var(--ink)', dot = 'transparent';
+      if (past) { const l = PATTERN[(d - 1) % PATTERN.length]; bg = HEAT[l]; fg = HEAT_FG[l]; }
+      else {
+        if ((S.tasks[key(m, d)] || []).length) dot = 'var(--orange)';
+        if (isToday(m, d)) { bg = 'var(--green-soft)'; fg = 'var(--green-dark)'; }
+      }
+      html += '<button data-a="planday" data-d="' + d + '" aria-label="' + d + ' ' + MONTHS_GEN[m] + '" style="background:' + bg + ';color:' + fg + ';border-color:' + (d === sel ? 'var(--ink)' : 'transparent') + '">' +
+        '<span>' + d + '</span><span class="dot" style="background:' + dot + '"></span></button>';
+    }
+    html += '</div>';
+    if (past) {
+      html += '<div class="legend"><span style="margin-right:4px">Меньше</span>' + HEAT.map((c) => '<span class="sw" style="background:' + c + '"></span>').join('') + '<span style="margin-left:4px">Больше</span></div>';
+    }
+    html += '</div>';
+
+    const title = (isToday(m, sel) ? 'Сегодня, ' : DAYS[weekday(m, sel)] + ', ') + sel + ' ' + MONTHS_GEN[m];
+    html += '<div class="card pad"><div style="display:flex;align-items:center;justify-content:space-between">' +
+      '<p style="font-size:17px;font-weight:800">' + title + '</p>' +
+      (past ? '' : '<button class="iconbtn plus" data-a="addon" data-m="' + m + '" data-d="' + sel + '" aria-label="Добавить задачу на этот день">' + I.plus + '</button>') + '</div>';
+    if (past) {
+      const done = [0, 2, 3, 5, 6][PATTERN[(sel - 1) % PATTERN.length]];
+      html += '<p style="font-size:15px;font-weight:700;color:var(--green-dark)">Сделано ' + done + ' из 6</p>' +
+        '<div class="progress"><div style="width:' + Math.round(done / 6 * 100) + '%"></div></div>' +
+        '<p class="muted" style="font-size:14px">Практика: жонглирование, прогулка, вода и 3 задачи</p>';
+    } else {
+      const list = S.tasks[key(m, sel)] || [];
+      html += list.length ? '<div>' + list.map((x, i) => taskRow(x, key(m, sel), i)).join('') + '</div>' : '<p style="font-size:14px;color:var(--hint)">Задач нет, только ежедневные пункты</p>';
+      html += '<p class="muted" style="font-size:13px;border-top:1px solid var(--line-soft);padding-top:10px">Каждый день: ' + S.practices.map((p) => 'практика').concat(S.habits.map((h) => h.title.toLowerCase())).join(', ') + '</p>';
+    }
+    html += '</div>';
+  } else {
+    html += '<p class="sub">2 – 8 ноября</p><div class="stack">';
+    for (let d = 2; d <= 8; d++) {
+      const list = S.tasks[key(10, d)] || [];
+      const name = isTomorrow(10, d) ? 'Завтра, пн' : DAYS[weekday(10, d)];
+      html += '<div class="card pad" style="gap:6px"><div style="display:flex;align-items:center;justify-content:space-between">' +
+        '<div style="display:flex;align-items:baseline;gap:8px"><p style="font-size:17px;font-weight:800">' + name + '</p><p class="muted" style="font-size:14px">' + d + ' ноября</p></div>' +
+        '<button class="iconbtn plus" data-a="addon" data-m="10" data-d="' + d + '" aria-label="Добавить задачу на этот день">' + I.plus + '</button></div>' +
+        (list.length ? '<div>' + list.map((x, i) => taskRow(x, key(10, d), i)).join('') + '</div>' : '<p style="font-size:14px;color:var(--hint)">Свободный день, только ежедневные пункты</p>') +
+        '</div>';
+    }
+    html += '</div>';
+  }
+  return html + '</div>';
+}
+
+function renderFriends() {
+  const me = { id: 'me', name: 'Вы', skill: (S.practices[0] ? S.practices[0].skill.toLowerCase() : 'жонглирование'), streak: '12 дней', practiceDone: S.practices[0] ? S.practices[0].done : false };
+  const members = FRIENDS.concat([me]);
+  const waiting = members.filter((m) => !m.practiceDone).map((m) => m.id === 'me' ? 'вас' : m.name === 'Зарина' ? 'Зарину' : m.name);
+  let html = '<div class="screen"><h1>Феи</h1>' +
+    '<div style="background:var(--orange-soft);border-radius:22px;padding:18px;display:flex;align-items:center;gap:14px">' +
+    '<div style="width:52px;height:52px;flex-shrink:0;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center">' + I.flameBig + '</div>' +
+    '<div class="stack" style="gap:2px"><p style="font-size:22px;font-weight:800;color:#6B3205">5 дней вместе</p>' +
+    '<p style="font-size:14px;font-weight:600;color:var(--orange-text)">' + (waiting.length ? 'Все отметили практику. Сегодня ждём ' + waiting.join(' и ') : 'Сегодня все отметились, серия продолжается') + '</p></div></div>';
+
+  html += '<div class="card pad"><div class="stack" style="gap:2px"><p class="label">ОБЩИЙ ЧЕЛЛЕНДЖ</p><p style="font-size:18px;font-weight:800">10 минут нового каждый день</p></div>';
+  members.forEach((m) => {
+    const c = COLORS[m.id];
+    html += '<div style="display:flex;align-items:center;gap:12px"><div class="avatar sm" style="background:' + c[0] + ';color:' + c[1] + '">' + (m.id === 'me' ? 'М' : m.name[0]) + '</div>' +
+      '<div class="grow" style="gap:0"><p style="font-size:15px;font-weight:700">' + m.name + '</p><p class="muted" style="font-size:13px">Сейчас: ' + esc(m.skill) + ' · ' + m.streak + '</p></div>' +
+      (m.practiceDone ? '<span style="width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center" role="img" aria-label="Сделано">' + I.check.replace('width="22" height="22"', 'width="16" height="16"') + '</span>' : '<span style="width:28px;height:28px;border-radius:50%;border:2px dashed var(--check-off)" role="img" aria-label="Ещё не сделано"></span>') + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="stack"><p class="label">СЕГОДНЯ У ФЕЙ</p><div class="card">';
+  FRIENDS.forEach((f) => {
+    const c = COLORS[f.id], behind = f.done / f.total < 0.5;
+    const liked = !!S.liked[f.id], nudged = !!S.nudged[f.id];
+    let btn;
+    if (behind) btn = '<button class="round" data-a="nudge" data-id="' + f.id + '" aria-pressed="' + nudged + '" aria-label="Напомнить" style="' + (nudged ? 'background:var(--orange-soft);color:var(--orange-text)' : '') + '">' + I.bell + '</button>';
+    else btn = '<button class="round" data-a="like" data-id="' + f.id + '" aria-pressed="' + liked + '" aria-label="Поддержать" style="' + (liked ? 'background:#FBEAF0;color:#993556' : '') + '">' + I.heart(liked ? 'currentColor' : 'none') + '</button>';
+    html += '<div class="row" style="padding:10px 0"><div class="avatar" style="background:' + c[0] + ';color:' + c[1] + '">' + f.name[0] + '</div>' +
+      '<div class="grow" style="gap:6px"><div style="display:flex;justify-content:space-between"><p style="font-size:15px;font-weight:700">' + f.name + '</p>' +
+      '<p style="font-size:13px;font-weight:700;color:var(--muted)">' + f.done + ' из ' + f.total + '</p></div>' +
+      '<div class="progress" style="height:6px"><div style="height:6px;width:' + Math.round(f.done / f.total * 100) + '%"></div></div></div>' + btn + '</div>';
+  });
+  html += '</div><p style="font-size:13px;color:var(--hint)">Приватные пункты фей сюда не попадают и не входят в счёт</p></div></div>';
+  return html;
+}
+
+function renderAdd() {
+  const A = S.add;
+  let html = '<div class="screen" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 120px)">' +
+    '<div style="display:flex;align-items:center;justify-content:space-between"><h1 style="font-size:26px">Новый пункт</h1>' +
+    '<button class="iconbtn" data-a="close" aria-label="Закрыть" style="background:var(--line)">' + I.close + '</button></div>' +
+    '<div class="stack" style="gap:8px"><label for="title" class="sub" style="font-weight:700">Что сделать</label>' +
+    '<input id="title" class="field' + (A.error ? ' err' : '') + '" type="text" placeholder="' + (A.type === 'task' ? 'Записаться к врачу' : 'Растяжка 10 минут') + '" value="' + esc(A.title) + '" autocomplete="off">' +
+    (A.error ? '<p class="error" id="title-error">' + A.error + '</p>' : '') + '</div>' +
+    '<div class="stack" style="gap:8px"><p class="sub" style="font-weight:700">Тип</p>' +
+    '<div class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))">' +
+    '<button class="' + (A.type === 'task' ? 'on' : '') + '" data-a="type" data-v="task">Задача</button>' +
+    '<button class="' + (A.type === 'habit' ? 'on' : '') + '" data-a="type" data-v="habit">Привычка</button></div>' +
+    '<p class="muted" style="font-size:13px">' + (A.type === 'task' ? 'Один раз, в выбранный день' : 'Появляется сама в нужные дни и копит серию') + '</p></div>';
+
+  if (A.type === 'task') {
+    const p = A.picked, m = A.calMonth;
+    html += '<div class="stack" style="gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between">' +
+      '<p class="sub" style="font-weight:700">Когда</p><p style="font-size:15px;font-weight:800;color:var(--green-dark)">' + dateLabel(p.m, p.d) + '</p></div>' +
+      '<div class="chips">' +
+      '<button class="chip' + (isToday(p.m, p.d) ? ' on' : '') + '" data-a="quick" data-d="' + TODAY.d + '">Сегодня</button>' +
+      '<button class="chip' + (isTomorrow(p.m, p.d) ? ' on' : '') + '" data-a="quick" data-d="' + (TODAY.d + 1) + '">Завтра</button></div>' +
+      '<div class="card" style="padding:10px;display:flex;flex-direction:column;gap:6px">' +
+      '<div class="calhead"><button class="iconbtn" data-a="addmonth" data-v="-1" aria-label="Предыдущий месяц">' + I.left + '</button>' +
+      '<p style="font-size:16px;font-weight:800">' + MONTHS[m] + ' ' + YEAR + '</p>' +
+      '<button class="iconbtn" data-a="addmonth" data-v="1" aria-label="Следующий месяц">' + I.right + '</button></div>' +
+      '<div class="cal">' + WD.map((w) => '<p class="wd">' + w + '</p>').join('');
+    for (let i = 0; i < offsetOf(m); i++) html += '<span></span>';
+    for (let d = 1; d <= daysIn(m); d++) {
+      const sel = p.m === m && p.d === d, today = isToday(m, d);
+      const pastDay = m === TODAY.m && d < TODAY.d;
+      html += '<button data-a="pick" data-d="' + d + '" aria-label="' + d + ' ' + MONTHS_GEN[m] + '" aria-pressed="' + sel + '" style="height:40px;background:' + (sel ? 'var(--green)' : today ? 'var(--green-soft)' : '#fff') + ';color:' + (sel ? '#fff' : today ? 'var(--green-dark)' : pastDay ? 'var(--check-off)' : 'var(--ink)') + ';border-color:' + (sel ? 'var(--green)' : 'transparent') + '">' + d + '</button>';
+    }
+    html += '</div></div></div>';
+  } else {
+    html += '<div class="stack" style="gap:8px"><p class="sub" style="font-weight:700">Повторять</p><div class="chips">' +
+      ['Каждый день', 'По будням', 'Пн, ср, пт'].map((r) => '<button class="chip' + (A.repeat === r ? ' on' : '') + '" data-a="repeat" data-v="' + r + '">' + r + '</button>').join('') + '</div></div>' +
+      '<button class="toggle" data-a="practiceToggle" aria-pressed="' + A.practice + '"><span class="grow" style="gap:2px"><span style="font-size:15px;font-weight:700">Это практика нового навыка</span>' +
+      '<span class="muted" style="font-size:13px">Навык можно менять, серия сохраняется</span></span><span class="track' + (A.practice ? ' on' : '') + '"></span></button>';
+    if (A.practice) {
+      html += '<div class="stack" style="gap:8px"><label for="skill" class="sub" style="font-weight:700">Какой навык сейчас</label>' +
+        '<input id="skill" class="field" type="text" placeholder="Жонглирование" value="' + esc(A.skill) + '" autocomplete="off"></div>' +
+        '<div class="stack" style="gap:8px"><p class="sub" style="font-weight:700">Минут в день</p>' +
+        '<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">' +
+        [5, 10, 15, 20].map((n) => '<button class="chip' + (A.min === n ? ' on' : '') + '" data-a="min" data-v="' + n + '" style="padding:0;border-radius:12px">' + n + '</button>').join('') + '</div></div>';
+    }
+  }
+
+  html += '<div class="stack" style="gap:8px"><p class="sub" style="font-weight:700">Кто видит</p>' +
+    '<div class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))">' +
+    '<button class="' + (A.vis === 'friends' ? 'on' : '') + '" data-a="vis" data-v="friends">Феи</button>' +
+    '<button class="' + (A.vis === 'me' ? 'on' : '') + '" data-a="vis" data-v="me">Только я</button></div>' +
+    '<p class="muted" style="font-size:13px">' + (A.vis === 'me' ? 'Феи не увидят этот пункт, и он не войдёт в их счёт' : 'Феи видят название и галочку') + '</p></div>';
+
+  if (A.type === 'habit' && A.vis === 'friends') {
+    html += '<button class="toggle" data-a="share" aria-pressed="' + A.share + '"><span class="grow" style="gap:2px"><span style="font-size:15px;font-weight:700">Сделать общим челленджем</span>' +
+      '<span class="muted" style="font-size:13px">Феи смогут присоединиться</span></span><span class="track' + (A.share ? ' on' : '') + '"></span></button>';
+  }
+  html += '</div><div class="addbar"><button class="primary" data-a="save">Добавить</button></div>';
+  return html;
+}
+
+function renderNav() {
+  const b = (tab, icon, label) => '<button class="' + (S.tab === tab ? 'on' : '') + '" data-a="tab" data-v="' + tab + '"' + (S.tab === tab ? ' aria-current="page"' : '') + '>' + icon + label + '</button>';
+  return '<nav class="tabs">' + b('today', I.list, 'Сегодня') + b('plan', I.calendar, 'План') +
+    '<button class="fab" data-a="addon" data-m="' + TODAY.m + '" data-d="' + (TODAY.d + 1) + '" aria-label="Добавить пункт">' + I.plus + '</button>' +
+    b('friends', I.usersBig, 'Феи') + '</nav>';
+}
+
+function render() {
+  let html;
+  if (S.tab === 'add') html = renderAdd();
+  else html = (S.tab === 'today' ? renderToday() : S.tab === 'plan' ? renderPlan() : renderFriends()) + renderNav();
+  app.innerHTML = html;
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+function goTab(tab) { S.tab = tab; render(); window.scrollTo(0, 0); }
+
+const actions = {
+  tab: (ds) => goTab(ds.v),
+  practice: (ds) => { const p = S.practices[+ds.i]; p.done = !p.done; render(); if (p.done) toast('Практика засчитана'); },
+  habit: (ds) => { const h = S.habits[+ds.i]; h.done = !h.done; render(); },
+  task: (ds) => { const x = S.tasks[ds.k][+ds.i]; x.done = !x.done; render(); },
+  skill: (ds) => {
+    const p = S.practices[+ds.i];
+    const v = prompt('Какой навык теперь?', '');
+    if (v && v.trim()) { p.skill = v.trim(); p.mins = 0; render(); toast('Навык сменён, серия сохранена'); }
+  },
+  planview: (ds) => { S.plan.view = ds.v; render(); },
+  planmonth: (ds) => { S.plan.month = Math.min(11, Math.max(9, S.plan.month + (+ds.v))); render(); },
+  planday: (ds) => { S.plan.sel[S.plan.month] = +ds.d; render(); },
+  like: (ds) => { S.liked[ds.id] = !S.liked[ds.id]; render(); if (S.liked[ds.id]) toast('Сердечко отправлено'); },
+  nudge: (ds) => { S.nudged[ds.id] = !S.nudged[ds.id]; render(); if (S.nudged[ds.id]) toast('Напоминание отправлено'); },
+  addon: (ds) => { S.add = freshAdd(+ds.m, +ds.d); goTab('add'); },
+  close: () => { S.add = null; goTab('today'); },
+  type: (ds) => { S.add.type = ds.v; render(); },
+  quick: (ds) => { S.add.picked = { m: TODAY.m, d: +ds.d }; S.add.calMonth = TODAY.m; render(); },
+  addmonth: (ds) => { S.add.calMonth = Math.min(11, Math.max(TODAY.m, S.add.calMonth + (+ds.v))); render(); },
+  pick: (ds) => {
+    const m = S.add.calMonth, d = +ds.d;
+    if (m === TODAY.m && d < TODAY.d) return;
+    S.add.picked = { m: m, d: d }; render();
+  },
+  repeat: (ds) => { S.add.repeat = ds.v; render(); },
+  practiceToggle: () => { S.add.practice = !S.add.practice; render(); },
+  min: (ds) => { S.add.min = +ds.v; render(); },
+  vis: (ds) => { S.add.vis = ds.v; if (ds.v === 'me') S.add.share = false; render(); },
+  share: () => { S.add.share = !S.add.share; render(); },
+  save: () => {
+    const A = S.add, title = A.title.trim();
+    if (!title) { A.error = 'Напишите, что сделать'; render(); document.getElementById('title').focus(); return; }
+    if (A.type === 'task') {
+      const k = key(A.picked.m, A.picked.d);
+      (S.tasks[k] = S.tasks[k] || []).push({ title: title, done: false, private: A.vis === 'me' });
+      if (isToday(A.picked.m, A.picked.d)) { S.add = null; goTab('today'); }
+      else { S.plan.view = 'month'; S.plan.month = A.picked.m; S.plan.sel[A.picked.m] = A.picked.d; S.add = null; goTab('plan'); }
+      toast('Задача добавлена');
+    } else if (A.practice) {
+      S.practices.push({ label: A.min + ' минут: ' + title.toLowerCase(), skill: A.skill.trim() || title, streak: 0, mins: 0, per: A.min, done: false });
+      S.add = null; goTab('today'); toast('Практика добавлена');
+    } else {
+      S.habits.push({ title: title, private: A.vis === 'me', repeat: A.repeat + (A.share ? ' · общий челлендж' : ''), streak: 0, done: false });
+      S.add = null; goTab('today'); toast('Привычка добавлена');
+    }
+  }
+};
+
+app.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-a]');
+  if (el && actions[el.dataset.a]) actions[el.dataset.a](el.dataset);
+});
+app.addEventListener('input', (e) => {
+  if (!S.add) return;
+  if (e.target.id === 'title') {
+    S.add.title = e.target.value;
+    if (S.add.error) {
+      S.add.error = '';
+      e.target.classList.remove('err');
+      const err = document.getElementById('title-error');
+      if (err) err.remove();
+    }
+  }
+  if (e.target.id === 'skill') S.add.skill = e.target.value;
+});
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('nav [data-a]');
+  if (el && !app.contains(el) && actions[el.dataset.a]) actions[el.dataset.a](el.dataset);
+});
+
+render();
+</script>
+</body>
+</html>
